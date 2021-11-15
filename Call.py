@@ -9,20 +9,17 @@ class Call:
     state = INIT
     allocated:int
 
-    def __init__(self, time:float , src:int , dest:int ):
+    def __init__(self, time:float , src:int , dest:int , allocated:int):
         self.time = time
         self.src = src
         self.dest = dest
+        self.allocated = 0
 
     def getState(self)->int:
         return self.state
     
     def getTime()->float:
         pass
-
-    
-
-    
 
     def getType(self)->int:
         if self.src<self.dest:
@@ -41,4 +38,7 @@ class Call:
     
     def getDest(self)->int:
         return self.dest
+    
+    def setAllocate(self , x:int):
+        self.allocated = x
         
