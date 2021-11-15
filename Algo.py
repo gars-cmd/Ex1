@@ -4,6 +4,11 @@ from Call import Call
 from Elevator import Elevator
 import json
 import csv
+import sys
+
+count0=0
+count1=0
+
 
 
 def jsonToBuilding(file):
@@ -18,20 +23,62 @@ def jsonToBuilding(file):
     return building
     
 
-def jsonToCall(file):
+def csvToCall(file):
     listCalls =[]  
-    with open(r'Ex1/data/Ex1_input/Ex1_input/Ex1_Calls/Calls_a.csv','r') as f:
+    with open(file,'r') as f:
         calls = csv.reader(f)
         for row in calls:
-            calld = Call(row[1],row[2],row[3])
+            calld = Call(row[1],row[2],row[3] , 0)
             listCalls.append(calld)
     return listCalls        
 
+def allocateAnElevator(b:Building , c:Call):    #efficient for multiplefloor and multiple elevators
+    choosen=0
+    if Building.numOfElevators(b)==1:
+        return choosen
+    else:
+        Categories = Building.elevatorsCategories(b)
+        
+        listOfSpeeder = Categories[0]
+        print(len(listOfSpeeder))
+        listOfSlower = Categories[1]
+        print(len(listOfSlower))
+        q = abs((b.minFloor-b.maxFloor)+1)/b.numOfElevators()
+        # print(q)
+        if abs(int(Call.getSrc(c))-int(Call.getDest(c))) > q*2:
+            # print("la")
+            global count0,count1
+            choosen = count0 % len(listOfSpeeder)
+            count0=count0+1
+            # print(count0)
+        else:
+            # print("la bas ")
+            choosen = count1 % len(listOfSlower)
+            count1 = count1 + 1
+            # print(count1)
+    # print(choosen)        
+    return choosen
 
-def __main__(fileBuilding , fileCall , fileOut):
-    Building = jsonToBuilding(fileBuilding)
-    listCalls = jsonToCall(fileCall)
+if __name__ == "__main__":
+    print("coucou")
+    fileBuild = sys.argv[1]
+    fileCall = sys.argv[2]
+    fileOut = sys.argv[3]
+
+    b = jsonToBuilding(fileBuild)
+    listCall = csvToCall(fileCall)   
+    listUpCall = []
+    listDownCall = []
+    # for item in listCall:
+    #     if (Call.getType(item) == 1):
+    #         listUpCall.append(item)
+    #     else:
+    #         listDownCall.append(item)    
     
+    
+    for item in listCall:
+        allocateAnElevator(b,item)
+        
+         
 
-b = jsonToBuilding(r'/mnt/c/Users/avido/Documents/Universite/matalot/OOP_2021/Assignments/Ex1/data/Ex1_input/Ex1_input/Ex1_Buildings/B3.json')
-print(b.maxFloor)
+        
