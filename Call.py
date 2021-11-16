@@ -4,7 +4,7 @@ class Call:
     GOING2DEST = 2 
     DONE = 3
     UP =1
-    DOWN = -1
+    DOWN =-1
     pos:int
     state = INIT
     allocated:int
@@ -18,11 +18,11 @@ class Call:
     def getState(self)->int:
         return self.state
     
-    def getTime()->float:
-        pass
+    def getTime(self)->float:
+        return self.time
 
     def getType(self)->int:
-        if self.src<self.dest:
+        if int(self.src)<int(self.dest):
             return self.UP
         else:
             return self.DOWN
